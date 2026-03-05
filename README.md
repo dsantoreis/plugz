@@ -1,40 +1,17 @@
-# AI Agent Skills Demo (Multi-Agent + RAG)
+# AI Agent Skills Demo (Go)
 
-Private demo repository showcasing:
+Repo demo **principal em Go** para mostrar stack diversity no portfolio.
 
-- **Multi-agent orchestration** (planner, researcher, writer, reviewer)
-- **Lightweight RAG pipeline** (local docs + lexical retrieval)
-- **Executable CLI** to run end-to-end workflows
-- **Minimal tests** for orchestration and retrieval
-
-## Quick start
-
+## Run
 ```bash
-cd ~/Projects/ai-agent-skills-demo
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-python -m ai_agent_demo.cli "How can we improve customer onboarding?"
+go run ./cmd/skills-demo "improve onboarding"
 ```
 
-## Example output
-
-The CLI prints:
-1. plan
-2. retrieved context snippets
-3. final draft
-4. reviewer notes
-
-## Run tests
-
+## Test
 ```bash
-python -m unittest discover -s tests -p 'test_*.py' -v
+go test ./...
 ```
 
-## Project structure
-
-- `src/ai_agent_demo/agents.py` — agent roles and orchestration logic
-- `src/ai_agent_demo/rag.py` — document chunking + retrieval
-- `src/ai_agent_demo/cli.py` — runnable CLI entrypoint
-- `tests/` — minimal regression coverage
-
+## Stack
+- Go (core orchestration demo)
+- Python (legacy prototype kept in `src/ai_agent_demo`)
