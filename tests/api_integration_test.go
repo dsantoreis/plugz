@@ -21,6 +21,27 @@ func newTestServer(t *testing.T) *httptest.Server {
 	return httptest.NewServer(api.NewServer(r, time.Second).Router())
 }
 
+func TestHealthAndReadyDoNotRequireAuth(t *testing.T) {
+	ts := newTestServer(t)
+	defer ts.Close()
+
+	healthResp, err := http.Get(ts.URL + "/healthz")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if healthResp.StatusCode != http.StatusOK {
+		t.Fatalf("expected 200 for /healthz got %d", healthResp.StatusCode)
+	}
+
+	readyResp, err := http.Get(ts.URL + "/readyz")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if readyResp.StatusCode != http.StatusOK {
+		t.Fatalf("expected 200 for /readyz got %d", readyResp.StatusCode)
+	}
+}
+
 func TestCatalogRequiresAuth(t *testing.T) {
 	ts := newTestServer(t)
 	defer ts.Close()

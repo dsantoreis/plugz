@@ -53,18 +53,28 @@ func NewServer(r *registry.Registry, timeout time.Duration) *Server {
 
 func (s *Server) Router() http.Handler {
 	r := chi.NewRouter()
-	r.Use(JSONLoggingMiddleware)
-	r.Use(AuthMiddleware)
-	r.Use(RateLimitMiddleware(60, time.Minute))
 
 	r.Get("/healthz", func(w http.ResponseWriter, _ *http.Request) {
 		respondJSON(w, http.StatusOK, map[string]string{"status": "ok"})
 	})
-	r.Handle("/metrics", promhttp.Handler())
-	r.Get("/api/v1/catalog", s.handleCatalog)
-	r.Get("/api/v1/installed", s.handleInstalled)
-	r.Post("/api/v1/install", s.handleInstall)
-	r.Post("/api/v1/test/{name}", s.handleTest)
+	r.Get("/readyz", func(w http.ResponseWriter, _ *http.Request) {
+		s.installedMu.RLock()
+		installed := len(s.installed)
+		s.installedMu.RUnlock()
+		respondJSON(w, http.StatusOK, map[string]any{"status": "ready", "installed": installed})
+	})
+
+	r.Group(func(r chi.Router) {
+		r.Use(JSONLoggingMiddleware)
+		r.Use(AuthMiddleware)
+		r.Use(RateLimitMiddleware(60, time.Minute))
+
+		r.Handle("/metrics", promhttp.Handler())
+		r.Get("/api/v1/catalog", s.handleCatalog)
+		r.Get("/api/v1/installed", s.handleInstalled)
+		r.Post("/api/v1/install", s.handleInstall)
+		r.Post("/api/v1/test/{name}", s.handleTest)
+	})
 
 	return otelhttp.NewHandler(r, "skills-api")
 }
