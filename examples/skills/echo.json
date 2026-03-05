@@ -1,0 +1,7 @@
+{
+  "name": "echo",
+  "description": "Echoes input payload",
+  "command": "/bin/sh",
+  "args": ["-c", "cat"],
+  "timeout_ms": 1000
+}

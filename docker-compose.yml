@@ -1,0 +1,5 @@
+services:
+  skillsd:
+    build: .
+    image: ai-agent-skills-demo:latest
+    command: ["list", "--skills-dir", "/app/examples/skills"]
