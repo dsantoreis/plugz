@@ -1,0 +1,18 @@
+Customer onboarding best practices:
+- Keep first-time setup under 5 minutes.
+- Show one clear next action after each step.
+- Use progressive disclosure to avoid overwhelming users.
+- Include contextual help and concise examples.
+- Measure activation events and time-to-value.
+
+AI agent orchestration notes:
+- Planner agent decomposes goals into subtasks.
+- Researcher agent retrieves relevant facts from local knowledge.
+- Writer agent synthesizes a clear response draft.
+- Reviewer agent checks clarity, risks, and missing details.
+
+RAG pipeline basics:
+- Split source docs into small chunks.
+- Compute lexical overlap scores for a query.
+- Retrieve top-k chunks as context.
+- Ground generated responses on retrieved evidence.
