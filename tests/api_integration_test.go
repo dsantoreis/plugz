@@ -60,6 +60,21 @@ func TestInstallAndTestFlow(t *testing.T) {
 	defer ts.Close()
 	client := &http.Client{}
 
+	readyBefore, err := http.Get(ts.URL + "/readyz")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if readyBefore.StatusCode != http.StatusOK {
+		t.Fatalf("ready before status: %d", readyBefore.StatusCode)
+	}
+	var readyBeforePayload map[string]any
+	if err := json.NewDecoder(readyBefore.Body).Decode(&readyBeforePayload); err != nil {
+		t.Fatal(err)
+	}
+	if got := int(readyBeforePayload["installed"].(float64)); got != 0 {
+		t.Fatalf("expected installed=0 before install, got %d", got)
+	}
+
 	installBody := bytes.NewBufferString(`{"name":"echo"}`)
 	req, _ := http.NewRequest(http.MethodPost, ts.URL+"/api/v1/install", installBody)
 	req.Header.Set("Authorization", "Bearer dev-token")
@@ -70,6 +85,21 @@ func TestInstallAndTestFlow(t *testing.T) {
 	}
 	if res.StatusCode != http.StatusOK {
 		t.Fatalf("install status: %d", res.StatusCode)
+	}
+
+	readyAfter, err := http.Get(ts.URL + "/readyz")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if readyAfter.StatusCode != http.StatusOK {
+		t.Fatalf("ready after status: %d", readyAfter.StatusCode)
+	}
+	var readyAfterPayload map[string]any
+	if err := json.NewDecoder(readyAfter.Body).Decode(&readyAfterPayload); err != nil {
+		t.Fatal(err)
+	}
+	if got := int(readyAfterPayload["installed"].(float64)); got != 1 {
+		t.Fatalf("expected installed=1 after install, got %d", got)
 	}
 
 	testBody := bytes.NewBufferString(`{"input":"hello"}`)
