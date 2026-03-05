@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: skills-registry
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: skills-registry
+  template:
+    metadata:
+      labels:
+        app: skills-registry
+    spec:
+      containers:
+        - name: api
+          image: ghcr.io/dsantoreis/ai-agent-skills-demo:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SKILLS_API_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: skills-secrets
+                  key: api-token
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10

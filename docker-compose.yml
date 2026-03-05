@@ -1,5 +1,22 @@
 services:
-  skillsd:
+  api:
     build: .
     image: ai-agent-skills-demo:latest
-    command: ["list", "--skills-dir", "/app/examples/skills"]
+    ports:
+      - "8080:8080"
+    environment:
+      SKILLS_API_TOKEN: dev-token
+
+  web:
+    image: node:20-alpine
+    working_dir: /app
+    volumes:
+      - ./web:/app
+    command: sh -c "npm ci && npm run dev -- --host 0.0.0.0"
+    environment:
+      VITE_API_URL: http://api:8080
+      VITE_API_TOKEN: dev-token
+    ports:
+      - "5173:5173"
+    depends_on:
+      - api

@@ -5,19 +5,22 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
+	"github.com/dsantoreis/ai-agent-skills-demo/internal/api"
 	"github.com/dsantoreis/ai-agent-skills-demo/internal/executor"
 	"github.com/dsantoreis/ai-agent-skills-demo/internal/registry"
+	"github.com/dsantoreis/ai-agent-skills-demo/internal/telemetry"
 	"github.com/dsantoreis/ai-agent-skills-demo/internal/watcher"
 )
 
 func main() {
 	if len(os.Args) < 2 {
-		fatal("usage: skillsd <list|run|watch> [flags]")
+		fatal("usage: skillsd <list|run|watch|serve> [flags]")
 	}
 
 	switch os.Args[1] {
@@ -27,6 +30,8 @@ func main() {
 		runSkill(os.Args[2:])
 	case "watch":
 		runWatch(os.Args[2:])
+	case "serve":
+		runServe(os.Args[2:])
 	default:
 		fatal("unknown command")
 	}
@@ -90,6 +95,44 @@ func runWatch(args []string) {
 	if err := watcher.Start(ctx, *skillsDir, r); err != nil {
 		fatal(err.Error())
 	}
+}
+
+func runServe(args []string) {
+	fs := flag.NewFlagSet("serve", flag.ExitOnError)
+	skillsDir := fs.String("skills-dir", "./examples/skills", "skills directory")
+	addr := fs.String("addr", ":8080", "HTTP listen address")
+	timeoutMs := fs.Int("timeout-ms", 3000, "default timeout in milliseconds")
+	_ = fs.Parse(args)
+
+	r, err := registry.New(*skillsDir)
+	if err != nil {
+		fatal(err.Error())
+	}
+	shutdownTelemetry, err := telemetry.Init(context.Background())
+	if err != nil {
+		fatal(err.Error())
+	}
+	defer func() { _ = shutdownTelemetry(context.Background()) }()
+
+	srv := &http.Server{
+		Addr:              *addr,
+		Handler:           api.NewServer(r, time.Duration(*timeoutMs)*time.Millisecond).Router(),
+		ReadHeaderTimeout: 5 * time.Second,
+	}
+
+	go func() {
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			fatal(err.Error())
+		}
+	}()
+	fmt.Printf("skills registry listening on %s\n", *addr)
+
+	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
+	defer stop()
+	<-ctx.Done()
+	shutdownCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	_ = srv.Shutdown(shutdownCtx)
 }
 
 func fatal(msg string) {
