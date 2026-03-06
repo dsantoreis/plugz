@@ -53,6 +53,8 @@ docker compose up --build
 kubectl apply -f k8s/
 ```
 
+Manifests include deployment, service, and ingress resources for production-like rollouts.
+
 ## CI + Coverage
 
 CI validates lint, tests, build, frontend bundle, race checks, and coverage gate:
