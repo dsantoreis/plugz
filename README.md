@@ -4,7 +4,7 @@
 
 ## Hero
 
-Production-ready Go skill marketplace and runtime for internal AI platforms.
+Production-ready Go skill marketplace and runtime for internal AI platform teams.
 
 Plugz gives teams one path to discover, install, and execute skills with governance, observability, and deterministic behavior.
 
