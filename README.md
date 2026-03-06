@@ -68,6 +68,17 @@ CI validates lint, tests, build, frontend bundle, race checks, and coverage gate
 
 ## Architecture
 
+```mermaid
+flowchart LR
+  U[Platform operator] --> W[Web catalog UI\nweb/]
+  W -->|Bearer token| API[Go API\ncmd/skillsd]
+  API --> REG[Registry\ninternal/registry]
+  API --> ORCH[Orchestrator\ninternal/orchestrator]
+  ORCH --> EXEC[Executor\ninternal/executor]
+  EXEC --> SK[Versioned skills\nexamples/skills or mounted volume]
+  API --> OBS[(Structured logs + metrics)]
+```
+
 - API server: `cmd/skillsd`
 - Core runtime: `internal/orchestrator`, `internal/executor`, `internal/registry`
 - Frontend catalog: `web/`
