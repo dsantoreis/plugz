@@ -37,3 +37,5 @@ kubectl apply -f k8s/
 ## CI
 
 Workflow em `.github/workflows/docs-site.yml` valida `npm ci` + `npm run build` em push/PR.
+
+Ajuste o host em `k8s/ingress.yaml` antes do deploy em produção.
