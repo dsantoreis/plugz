@@ -33,3 +33,7 @@ docker run --rm -p 4321:4321 plugz-docs:latest
 ```bash
 kubectl apply -f k8s/
 ```
+
+## CI
+
+Workflow em `.github/workflows/docs-site.yml` valida `npm ci` + `npm run build` em push/PR.
