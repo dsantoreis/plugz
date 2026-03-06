@@ -1,6 +1,6 @@
 # Plugz
 
-[![CI](../../actions/workflows/ci.yml/badge.svg)](#) [![Coverage >= 80%](https://img.shields.io/badge/coverage-80%25%2B-success)](#) [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
+[![CI](https://github.com/dsantoreis/plugz/actions/workflows/ci.yml/badge.svg)](https://github.com/dsantoreis/plugz/actions/workflows/ci.yml) [![Coverage >= 80%](https://img.shields.io/badge/coverage-80%25%2B-success)](#) [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
 
 ## Hero
 
