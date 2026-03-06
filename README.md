@@ -55,7 +55,7 @@ kubectl apply -f k8s/
 
 ## CI + Coverage
 
-CI validates lint, tests, build, frontend bundle, and coverage gate:
+CI validates lint, tests, build, frontend bundle, race checks, and coverage gate:
 
 - `golangci-lint`
 - `go test ./...`
