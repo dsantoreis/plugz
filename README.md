@@ -77,4 +77,4 @@ CI validates lint, tests, build, frontend bundle, race checks, and coverage gate
 ## CTA
 
 If this helps your team ship governed AI skills faster, star the repo and open an issue with your use case.
-PRs with reproducible load-test notes and coverage deltas are welcome.
+PRs with reproducible load-test notes, benchmark output, and coverage deltas are welcome.
