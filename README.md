@@ -8,6 +8,9 @@ Production-ready Go skill marketplace and runtime for internal AI platforms.
 
 Plugz gives teams one path to discover, install, and execute skills with governance, observability, and deterministic behavior.
 
+![Plugz hero](docs/screenshots/plugz-hero.png)
+![Plugz demo GIF](docs/screenshots/plugz-demo.gif)
+
 ## Problem
 
 Most internal AI tools break at scale because skills are scattered across scripts with no install contract, no audit trail, and no runtime policy.
