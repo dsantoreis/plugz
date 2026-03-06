@@ -39,6 +39,8 @@ Build static docs:
 npm run build
 ```
 
+Published docs: https://dsantoreis.github.io/plugz/
+
 ## Docker
 
 ```bash
