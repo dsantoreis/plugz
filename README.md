@@ -13,7 +13,7 @@ Plugz gives teams one path to discover, install, and execute skills with governa
 
 ## Problem
 
-Most internal AI tools break at scale because skills are scattered across scripts with no install contract, no audit trail, and no runtime policy.
+Most internal AI tools break at scale in production because skills are scattered across scripts with no install contract, no audit trail, and no runtime policy.
 
 Plugz solves this with a versioned catalog API, controlled execution, and a frontend that operators can actually use.
 
