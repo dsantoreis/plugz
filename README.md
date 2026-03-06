@@ -17,7 +17,7 @@ Most internal AI tools break at scale because skills are scattered across script
 
 Plugz solves this with a versioned catalog API, controlled execution, and a frontend that operators can actually use.
 
-## Quickstart (3 commands)
+## Quickstart (3 comandos)
 
 ```bash
 go run ./cmd/skillsd serve --skills-dir ./examples/skills --addr :8080
