@@ -10,7 +10,15 @@ export default defineConfig({
       description: 'Go skills runtime and marketplace docs.',
       defaultLocale: 'en',
       social: { github: 'https://github.com/dsantoreis/plugz' },
-      sidebar: [{ label: 'Docs', autogenerate: { directory: '.' } }]
+      sidebar: [{
+        label: 'Documentation',
+        items: [
+          { label: 'Getting Started', link: '/getting-started/' },
+          { label: 'Architecture', link: '/architecture/' },
+          { label: 'API Reference', link: '/api-reference/' },
+          { label: 'Deployment', link: '/deployment/' }
+        ]
+      }]
     })
   ]
 });
