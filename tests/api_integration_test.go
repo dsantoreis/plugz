@@ -24,6 +24,7 @@ func newTestServer(t *testing.T) *httptest.Server {
 func TestHealthAndReadyDoNotRequireAuth(t *testing.T) {
 	ts := newTestServer(t)
 	defer ts.Close()
+	client := &http.Client{}
 
 	healthResp, err := http.Get(ts.URL + "/healthz")
 	if err != nil {
@@ -33,12 +34,30 @@ func TestHealthAndReadyDoNotRequireAuth(t *testing.T) {
 		t.Fatalf("expected 200 for /healthz got %d", healthResp.StatusCode)
 	}
 
+	headHealthReq, _ := http.NewRequest(http.MethodHead, ts.URL+"/healthz", nil)
+	headHealthResp, err := client.Do(headHealthReq)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if headHealthResp.StatusCode != http.StatusOK {
+		t.Fatalf("expected 200 for HEAD /healthz got %d", headHealthResp.StatusCode)
+	}
+
 	readyResp, err := http.Get(ts.URL + "/readyz")
 	if err != nil {
 		t.Fatal(err)
 	}
 	if readyResp.StatusCode != http.StatusOK {
 		t.Fatalf("expected 200 for /readyz got %d", readyResp.StatusCode)
+	}
+
+	headReadyReq, _ := http.NewRequest(http.MethodHead, ts.URL+"/readyz", nil)
+	headReadyResp, err := client.Do(headReadyReq)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if headReadyResp.StatusCode != http.StatusOK {
+		t.Fatalf("expected 200 for HEAD /readyz got %d", headReadyResp.StatusCode)
 	}
 }
 

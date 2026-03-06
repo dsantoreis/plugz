@@ -54,14 +54,22 @@ func NewServer(r *registry.Registry, timeout time.Duration) *Server {
 func (s *Server) Router() http.Handler {
 	r := chi.NewRouter()
 
-	r.Get("/healthz", func(w http.ResponseWriter, _ *http.Request) {
+	r.MethodFunc(http.MethodGet, "/healthz", func(w http.ResponseWriter, _ *http.Request) {
 		respondJSON(w, http.StatusOK, map[string]string{"status": "ok"})
 	})
-	r.Get("/readyz", func(w http.ResponseWriter, _ *http.Request) {
+	r.MethodFunc(http.MethodHead, "/healthz", func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+	})
+	r.MethodFunc(http.MethodGet, "/readyz", func(w http.ResponseWriter, _ *http.Request) {
 		s.installedMu.RLock()
 		installed := len(s.installed)
 		s.installedMu.RUnlock()
 		respondJSON(w, http.StatusOK, map[string]any{"status": "ready", "installed": installed})
+	})
+	r.MethodFunc(http.MethodHead, "/readyz", func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
 	})
 
 	r.Group(func(r chi.Router) {
