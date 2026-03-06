@@ -1,0 +1,8 @@
+services:
+  docs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: plugz-docs:latest
+    ports:
+      - "4321:4321"
