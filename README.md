@@ -67,7 +67,7 @@ CI validates lint, tests, build, frontend bundle, and coverage gate:
 - Core runtime: `internal/orchestrator`, `internal/executor`, `internal/registry`
 - Frontend catalog: `web/`
 - Docs UI: `docs-site/`
-- Published: GitHub Pages via `.github/workflows/docs.yml`
+- Published: https://dsantoreis.github.io/plugz/ (GitHub Pages via `.github/workflows/docs.yml`)
 
 ## CTA
 
