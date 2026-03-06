@@ -74,6 +74,10 @@ CI validates lint, tests, build, frontend bundle, race checks, and coverage gate
 - Docs UI: `docs-site/`
 - Published: https://dsantoreis.github.io/plugz/ (GitHub Pages via `.github/workflows/docs.yml`)
 
+## Awesome use cases
+
+See [awesome-use-cases.md](./awesome-use-cases.md) for ten production patterns (support triage, lead enrichment, incident command, RAG refresh, audit bundles, and more).
+
 ## CTA
 
 If this helps your team ship governed AI skills faster, star the repo and open an issue with your use case.
