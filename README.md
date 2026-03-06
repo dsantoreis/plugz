@@ -39,7 +39,7 @@ Build static docs:
 npm run build
 ```
 
-Published docs: https://dsantoreis.github.io/plugz/
+Published docs: https://dsantoreis.github.io/plugz/ (GitHub Pages via `.github/workflows/docs.yml`)
 
 ## Docker
 
