@@ -19,19 +19,22 @@ jobs:
           version: v1.64.8
           args: --timeout=5m
       - name: Unit + Integration + E2E
-        run: go test ./... -coverprofile=coverage.out -covermode=atomic
+        run: go test ./...
       - name: Build
         run: go build ./...
-      - name: Coverage report
+      - name: Coverage gate (core >= 80%)
         run: |
-          go tool cover -func=coverage.out | tee coverage.txt
-          go tool cover -html=coverage.out -o coverage.html
+          go test ./internal/orchestrator -coverprofile=coverage.out -covermode=atomic
+          pct=$(go tool cover -func=coverage.out | awk '/^total:/ {gsub("%", "", $3); print $3}')
+          echo "Coverage: ${pct}%"
+          awk -v p="$pct" 'BEGIN { exit (p >= 80 ? 0 : 1) }'
+      - name: Coverage report artifact
+        run: go tool cover -html=coverage.out -o coverage.html
       - uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: |
             coverage.out
-            coverage.txt
             coverage.html
 
   web-build:
@@ -39,6 +42,19 @@ jobs:
     defaults:
       run:
         working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci
+      - run: npm run build
+
+  docs-build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: docs-site
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

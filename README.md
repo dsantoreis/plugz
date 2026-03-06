@@ -1,125 +1,70 @@
-# AI Agent Skills Marketplace & Registry
+# Plugz
 
-[![CI](../../actions/workflows/ci.yml/badge.svg)](#) [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
+[![CI](../../actions/workflows/ci.yml/badge.svg)](#) [![Coverage >= 80%](https://img.shields.io/badge/coverage-80%25%2B-success)](#) [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
 
+## Hero
 
-Enterprise-ready Go + React reference implementation for a **skill marketplace**:
-- Web catalog (React) for discovery, install, and test flows
-- Registry/API in Go with auth, rate limiting, JSON logs, Prometheus + OpenTelemetry
-- Docker + Kubernetes deployment assets
-- CI with lint/test/build, integration/e2e, and coverage artifacts
-- Stress testing playbook (load/chaos/soak)
+Production-ready Go skill marketplace and runtime for internal AI platforms.
 
-## Product Pitch
+Plugz gives teams one path to discover, install, and execute skills with governance, observability, and deterministic behavior.
 
-This project demonstrates how to package AI skills as versioned contracts and expose them through a marketplace user experience. It is aimed at teams building internal AI platforms and partner ecosystems where governance, observability, and reliability matter as much as speed.
+## Problem
 
-## Architecture
+Most internal AI tools break at scale because skills are scattered across scripts with no install contract, no audit trail, and no runtime policy.
 
-- **Backend**: `cmd/skillsd serve` + `internal/api`
-- **Skill Runtime**: `internal/registry`, `internal/executor`
-- **Frontend**: `web/` (React + Vite)
-- **Telemetry**:
-  - JSON request logs
-  - Prometheus metrics (`/metrics`)
-  - OpenTelemetry tracing (stdout exporter)
+Plugz solves this with a versioned catalog API, controlled execution, and a frontend that operators can actually use.
 
-See full technical layout in `docs/architecture.md`.
+## Quickstart (3 commands)
 
-## Quickstart
-
-### 1) Backend API
 ```bash
 go run ./cmd/skillsd serve --skills-dir ./examples/skills --addr :8080
-```
-
-### 2) Frontend catalog
-```bash
-cd web
-npm ci
-VITE_API_URL=http://localhost:8080 VITE_API_TOKEN=dev-token npm run dev
-```
-
-### 3) Use the API directly
-```bash
+cd web && npm ci && VITE_API_URL=http://localhost:8080 VITE_API_TOKEN=dev-token npm run dev
 curl -H "Authorization: Bearer dev-token" http://localhost:8080/api/v1/catalog
-curl -X POST -H "Authorization: Bearer dev-token" -H "Content-Type: application/json" \
-  -d '{"name":"echo"}' http://localhost:8080/api/v1/install
-curl -X POST -H "Authorization: Bearer dev-token" -H "Content-Type: application/json" \
-  -d '{"input":"hello"}' http://localhost:8080/api/v1/test/echo
 ```
 
-## Security Defaults
+## Docs Site (Astro Starlight)
 
-- Bearer token enforced for marketplace routes
-- Per-IP rate limiting middleware
-- Structured logs for auditability
-- Security policy in `SECURITY.md`
+```bash
+cd docs-site
+npm install
+npm run dev
+```
 
-## CI Quality Gate
+Build static docs:
 
-GitHub Actions (`.github/workflows/ci.yml`) runs:
-- `golangci-lint`
-- `go test ./... -coverprofile=coverage.out`
-- `go build ./...`
-- coverage text + HTML report artifact
-- frontend build (`npm run build`)
+```bash
+npm run build
+```
 
-## Docker & Kubernetes
+## Docker
 
 ```bash
 docker compose up --build
+```
+
+## Kubernetes
+
+```bash
 kubectl apply -f k8s/
 ```
 
-## Stress Suite
+## CI + Coverage
 
-Runbook and scripts in `docs/stress/` + `scripts/`.
+CI validates lint, tests, build, frontend bundle, and coverage gate:
 
-## Governance & Community
+- `golangci-lint`
+- `go test ./...`
+- `go build ./...`
+- `go test ./internal/orchestrator -coverprofile=coverage.out`
+- `go tool cover -func=coverage.out` with `>=80%` threshold
 
-- `SECURITY.md`
-- `CONTRIBUTING.md`
-- `CODE_OF_CONDUCT.md`
-- `CHANGELOG.md`
+## Architecture
 
-## License
+- API server: `cmd/skillsd`
+- Core runtime: `internal/orchestrator`, `internal/executor`, `internal/registry`
+- Frontend catalog: `web/`
+- Docs UI: `docs-site/`
 
-MIT
+## CTA
 
-
-## Conversion Standard
-
-### Hero
-Production-ready solution for a concrete business problem with measurable outcome.
-
-### Problem
-Describe the pain with one sentence and a real operator context.
-
-### Demo
-Add a GIF at `docs/assets/demo.gif` and reference it here.
-
-### Quickstart (3 commands)
-```bash
-make setup || pnpm install || npm install
-make test || pnpm test || npm test
-make run || pnpm dev || npm run dev
-```
-
-### Architecture
-Document API, workers, and storage in `docs/architecture.md`.
-
-### Results
-Add benchmark, latency, throughput, or conversion impact.
-
-### Roadmap
-Include 30-day and 90-day milestones.
-
-### CTA
-If this helps, star the repo and open an issue with your use case.
-
-
-## Docs
-
-- Local docs site config: `mkdocs.yml`
-- Entry point: `docs/index.md`
+If this helps your team ship governed AI skills faster, star the repo and open an issue with your use case.
